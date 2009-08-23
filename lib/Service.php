@@ -5,37 +5,12 @@ require_once dirname( __FILE__ ) . '/Representation.php';
 class Chemcaster_Service extends Chemcaster_Representation
 {
     /**
-     * Stores a Chemcaster_Link object
-     * @var Chemcaster_Link $registries
-     */
-    //private $_registries;
-
-    /**
-     * Stores the service version
-     * @var stdClass $service
-     */
-    //private $_service;
-
-    /**
      * Stores the curl resource handle
      * @var resource $service_handle
      * @static
      */
     public static $service_handle;
-/*
-    public function __construct( Chemcaster_Link $Link )
-    {
-        $index = json_decode( $Link->get() );
 
-        $this->_registries = new Chemcaster_Link(
-            $index->registries->name,
-            $index->registries->uri,
-            $index->registries->media_type
-        );
-
-        $this->_service = $index->service;
-    }
-*/
     /**
      * Static connection method
      * @param string $username
@@ -77,17 +52,5 @@ class Chemcaster_Service extends Chemcaster_Representation
         if( 1 === $replaced_count )
             require_once dirname(__FILE__) . '/' . $name . '.php';
     }
-/*
-    public function getRegistries()
-    {
-        return Chemcaster_Representation::factory( $this->_registries );
-    }
-    
-    public function getService()
-    {
-        return $this->_service;
-    }
-    *
- */
 }
 ?>
