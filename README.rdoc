@@ -9,27 +9,22 @@ search.
 
 === Connecting to the Service
 
-   require_once '/path/to/chemcaster-php/lib/Service.php';
+   require_once '/path/to/chemcaster-php/lib/chemcaster.php';
 
-   Chemcaster_Service::enableFileAutoInclude();
    $service = Chemcaster_Service::connect('username', 'password');
 
 === Loading a Registry
 
-   require_once '/path/to/chemcaster-php/lib/Service.php';
-
-   Chemcaster_Service::enableFileAutoInclude();
+   require_once '/path/to/chemcaster-php/lib/chemcaster.php';
 
    $service    = Chemcaster_Service::connect('username', 'password');
    $registries = $service->registries;
-   $size       = $registries.size();
+   $size       = $registries->size();
    $registry   = $registries[0];
 
 === Creating a Registry
 
-   require_once '/path/to/chemcaster-php/lib/Service.php';
-
-   Chemcaster_Service::enableFileAutoInclude();
+   require_once '/path/to/chemcaster-php/lib/chemcaster.php';
 
    $service      = Chemcaster_Service::connect('username', 'password');
    $registries   = $service->registries;

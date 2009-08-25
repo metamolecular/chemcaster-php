@@ -1,5 +1,4 @@
 <?php
-require_once dirname( __FILE__ ) . '/Representation.php';
 
 /**
  * Service class
@@ -49,28 +48,6 @@ class Chemcaster_Service extends Chemcaster_Representation
         $class = 'Chemcaster_Service';
         
         return new $class( $link );
-    }
-
-    /**
-     * Registers the Chemcaster automatic file including for classes
-     * @static
-     */
-    public static function enableFileAutoInclude()
-    {
-        spl_autoload_register('Chemcaster_Service::fileAutoLoad');
-    }
-
-    /**
-     * The automatic file include method for classes. There is no need to call
-     * this method yourself
-     * @param string $name
-     * @static
-     */
-    public static function fileAutoLoad( $name )
-    {
-        $name = str_replace('Chemcaster_', '', $name, $replaced_count);
-        if( 1 === $replaced_count )
-            require_once dirname(__FILE__) . '/' . $name . '.php';
     }
 }
 
