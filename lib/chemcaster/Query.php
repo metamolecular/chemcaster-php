@@ -9,8 +9,11 @@
  */
 class Chemcaster_Query extends Chemcaster_Representation
 {
-    protected $_attributes = array( 'molfile' );
-
-    protected $_resources = array( 'images', 'registry' );
+    protected $_links = array(
+        'images'       => '',
+        'index'        => '',
+        'destroy'      => ''
+    );
 }
 
+?>

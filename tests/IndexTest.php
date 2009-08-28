@@ -4,26 +4,23 @@ require_once('PHPUnit/Framework.php');
 include_once(dirname(__FILE__) . '/../lib/chemcaster/Representation.php');
 include_once(dirname(__FILE__) . '/../lib/chemcaster/Service.php');
 include_once(dirname(__FILE__) . '/../lib/chemcaster/Link.php');
+include_once(dirname(__FILE__) . '/../lib/chemcaster/Index.php');
 include_once('stubs.php');
 
-class ServiceTest extends PHPUnit_Framework_TestCase
+
+class IndexTest extends PHPUnit_Framework_TestCase
 {
 
     public function testClassExists()
     {
-        $this->assertTrue( class_exists('Chemcaster_Service') );
+        $this->assertTrue( class_exists('Chemcaster_Index') );
     }
 
-    public function testConnect()
+    public function testGetRegistriesIndex()
     {
         $service = Chemcaster_Service::connect('username', 'password');
-        $this->assertSame('Chemcaster_Service', get_class($service));
-    }
-
-    public function testGetVersion()
-    {
-        $service = Chemcaster_Service::connect('username', 'password');
-        $this->assertSame('0.1.0', $service->version);
+        $registries = $service->registries;
+        $this->assertTrue( 'Chemcaster_Index' === get_class($registries) );
     }
 }
 

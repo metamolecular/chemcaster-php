@@ -1,108 +1,135 @@
 <?php
 
 /**
- * Base abstract Representation class
- * @abstract
+ * Representation class
  * @copyright   Copyright (c) 2009, Metamolecular, LLC
  * @license     http://www.gnu.org/licenses/gpl.txt GNU GENERAL PUBLIC LICENSE
  * @link        http://metamolecular.com
  * @author      Rob Apodaca <rob.apodaca@gmail.com>
  */
-abstract class Chemcaster_Representation
+class Chemcaster_Representation
 {
     /**
-     * Stores the Link object for this representation
-     * @var Chemcaster_Link $_link
+     * The transporter object
+     * @var Chemcaster_Transporter
      */
-    protected $_link;
+    protected $_transporter;
 
     /**
-     * Holds the representation attribute names
-     * @var array $_attributes
+     * Holds array of links. Override in sub classes for specific Representations
+     * @var array
      */
-    protected $_attributes = array();
+    protected $_links = array();
 
     /**
-     * Holds the representation resource names
-     * @var array  $_resources
+     *
+     * @var array
      */
-    protected $_resources = array();
+    protected $_items = array();
 
     /**
-     * Stores the fetched json as stdClass object
-     * @var stdClass $_fetched
+     * Stores any errors
+     * @var array
      */
-    protected $_fetched;
+    protected $_errors = array();
 
     /**
-     * Class Constructor
-     * @param Chemcaster_Link $Link
+     * Class constructor
+     * @param Chemcaster_Transporter $transporter
+     * @param mixed $link - Chemcaster_Link or raw json data
+     * @access public
      */
-    public function __construct( Chemcaster_Link $Link )
+    public function __construct( Chemcaster_Transporter $transporter, $link )
     {
-        $this->_link = $Link;
+        $this->_transporter = $transporter;
+
+        $class = strtolower( str_replace('Chemcaster_', '', get_class($this)) );
+
+        if( TRUE === is_object($link) )
+            $raw_data = $this->_transporter->get($link);
+        else
+            $raw_data = $link;
+
+        $decoded_obj = json_decode($raw_data);
+        foreach( $decoded_obj as $name => $value )
+        {
+            if( $name === $class )
+            {
+                foreach( $value as $k => $v )
+                {
+                    $this->$k = $v;
+                }
+            }
+            else if( 'items' === $name )
+            {
+                foreach( $value as $v )
+                    $this->_items[] = new Chemcaster_Link($v->name, $v->uri, $v->media_type);
+            }
+            else if( TRUE === isset($this->_links[$name]) )
+            {
+                $this->_links[$name] = new Chemcaster_Link($value->name, $value->uri, $value->media_type);
+            }
+        }
     }
 
     /**
      * Magic get method
-     * @param string $get
-     * @return mixed Chemcaster_Representation or string
+     * @param string $property
+     * @return Chemcaster_Link
+     * @access public
      */
-    public function __get( $get )
+    public function __get( $property )
     {
-        $this->_fetch();
-
-        if( TRUE === in_array($get, $this->_attributes) )
+        if( TRUE === array_key_exists($property, $this->_links) && '' !== $this->_links[$property] )
         {
-            $class = get_class( $this );
-            $class = str_replace('Chemcaster_', '', $class);
-            $class = strtolower($class);
-            
-            $this->$get = $this->_fetched->$class->$get;
-
-            return $this->$get;
-        }
-        else if( TRUE === in_array($get, $this->_resources) )
-        {
-            $this->$get = self::factory(new Chemcaster_Link(
-                $this->_fetched->$get->name,
-                $this->_fetched->$get->uri,
-                $this->_fetched->$get->media_type
-            ));
-            return $this->$get;
+            $link = $this->_links[$property];
+            return $this->_factory( $link );
         }
         else
         {
             $debug = debug_backtrace();
             $file = $debug[0]['file'];
             $line = $debug[0]['line'];
-            $error = "Unknown property $get called from file: $file on line: $line "
+            $error = "Unknown property $property called from file: $file on line: $line "
                    . "in class " . get_class($this);
             trigger_error($error);
         }
     }
 
     /**
-     * Fetches the _link if not already fetched and stores in _fetched
+     * Create a new Representation object based on supplied link
+     * @param Chemcaster_Link $Link
+     * @return mixed
+     * @access protected
      */
-    protected function _fetch()
+    protected function _factory( Chemcaster_Link $Link )
     {
-        if( ! $this->_fetched )
-            $this->_fetched = Chemcaster_Json::decode( $this->_link->get() );
+        preg_match('/application\/vnd.com.chemcaster.(.*)\+json/', $Link->mediaType, $matches);
+
+        $class = 'Chemcaster_' . $matches[1];
+
+        return new $class( $this->_transporter, $Link );
     }
 
     /**
-     * Factory method creates appropriate Representation object based on Link
-     * @param Chemcaster_Link $Link
-     * @return mixed Chemcaster_Representation object
+     * Creates a new link from supplied json
+     * @param string $json_string
+     * @return Chemcaster_Link
      */
-    public static function factory( Chemcaster_Link $Link )
+    protected function _makeLink( $json_string )
     {
-        preg_match('/application\/vnd.com.chemcaster.(.*)\+json/', $Link->mediaType, $matches);
-        
-        $class = 'Chemcaster_' . $matches[1];
+        $obj = json_decode( $json_string );
+        return new Chemcaster_Link($obj->name, $obj->uri, $obj->mediaType);
+    }
 
-        return new $class( $Link );
+    /**
+     * Gets the object's errors array
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->_errors;
     }
 }
 
+?>

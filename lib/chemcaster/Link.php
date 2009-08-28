@@ -10,28 +10,29 @@
 class Chemcaster_Link
 {
     /**
-     * The name of the Link
-     * @var string $name
+     * Name of the link
+     * @var string
      */
     public $name;
 
     /**
-     * The uri of the Link
-     * @var string $uri
+     * The uri of the link
+     * @var string
      */
     public $uri;
 
     /**
-     * The media type of the Link
-     * @var string $uri
+     * Media Type of the link
+     * @var string
      */
     public $mediaType;
 
     /**
-     * Class constructor
-     * @param sring $name
+     * Class Constructor
+     * @param string $name
      * @param string $uri
      * @param string $media_type
+     * @access public
      */
     public function __construct( $name, $uri, $media_type )
     {
@@ -41,119 +42,14 @@ class Chemcaster_Link
     }
 
     /**
-     * Performs a "GET" on the link
-     * @return string the json returned string
+     * Extracts the Representation name from the link
+     * @return string
      * @access public
      */
-    public function get( )
+    public function getRepresentationName()
     {
-        return $this->_request( 'GET' );
+        preg_match('/application\/vnd.com.chemcaster.(.*)\+json/', $this->mediaType, $matches);
+
+        return $matches[1];
     }
-
-    /**
-     * Performs a "POST" on the link
-     * @param array $args
-     * @return string the json returned string
-     * @access public
-     */
-    public function post( $args )
-    {
-        $encode = json_encode($args);
-        
-        curl_setopt(Chemcaster_Service::$service_handle, CURLOPT_POSTFIELDS, $encode);
-        $post = $this->_request( 'POST' );
-        return $post;
-    }
-
-    /**
-     * Performs a "PUT" on the link
-     * @param array $args
-     * @return string the json returned string
-     * @access public
-     */
-    public function put( $args )
-    {
-        $encode = json_encode($args);
-
-        curl_setopt(Chemcaster_Service::$service_handle, CURLOPT_POSTFIELDS, $encode);
-        return $this->_request( 'PUT' );
-    }
-
-    /**
-     * Performs a "DELETE" on the link
-     * @return string the json returned string
-     * @access public
-     */
-    public function delete()
-    {
-        return $this->_request( 'DELETE' );
-    }
-
-    /**
-     * Internal method request
-     * @param string $method
-     * @return string the json returned string
-     */
-    private function _request( $method )
-    {
-        switch( $method )
-        {
-            case 'GET':
-                $this->_setRequest( 'GET' );
-                curl_setopt( Chemcaster_Service::$service_handle, CURLOPT_HTTPHEADER, array(
-                    "Accept: {$this->mediaType}"
-                ));
-                break;
-            
-            case 'POST':
-                $this->_setRequest( 'POST' );
-                curl_setopt( Chemcaster_Service::$service_handle, CURLOPT_HTTPHEADER, array(
-                    "Accept: {$this->mediaType}",
-                    "Content-Type: {$this->mediaType}"
-                ));
-                break;
-            case 'PUT':
-                $this->_setRequest( 'PUT' );
-                curl_setopt( Chemcaster_Service::$service_handle, CURLOPT_HTTPHEADER, array(
-                    "Accept: {$this->mediaType}",
-                    "Content-Type: {$this->mediaType}"
-                ));
-                break;
-            case 'DELETE':
-                $this->_setRequest( 'DELETE' );
-                curl_setopt( Chemcaster_Service::$service_handle, CURLOPT_HTTPHEADER, array(
-                    "Accept: {$this->mediaType}"
-                ));
-                break;
-        }
-
-        $this->_setUri();
-
-        $fetched = curl_exec( Chemcaster_Service::$service_handle );
-        
-        // todo:  handle errors
-        
-        return $fetched;
-    }
-
-    /**
-     * sets the uri to request
-     * @access private
-     */
-    private function _setUri()
-    {
-        curl_setopt( Chemcaster_Service::$service_handle, CURLOPT_URL, $this->uri );
-    }
-
-    /**
-     * Sets the request method
-     * @param string $method
-     * @access private
-     */
-    private function _setRequest( $method )
-    {
-        curl_setopt( Chemcaster_Service::$service_handle, CURLOPT_CUSTOMREQUEST, $method );
-    }
-
 }
-
