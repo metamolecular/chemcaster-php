@@ -10,16 +10,12 @@
 class Chemcaster_Index extends Chemcaster_Representation implements Iterator, ArrayAccess
 {
     /**
-     *
+     * Used by Iterator Interface
      * @var int
      */
     private $_position = 0;
 
-    /**
-     *
-     * @var array
-     */
-    protected $_links = array( 'parent' => '', 'create' => '' );
+    protected $_links = array( 'parent' => '', 'create' => '', 'previous_page' => '', 'next_page' => '' );
 
     /**
      * Create method for give index
@@ -39,7 +35,7 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
         $http_code = (string) $this->_transporter->getLastStatusCode();
         if( '2' == $http_code[0] )
         {
-            $new_class = 'Chemcaster_' . $this->_links['create']->getRepresentationName();
+            $new_class = 'Chemcaster_' . $link->getRepresentationName();
             
             return new $new_class( $this->_transporter, $ret_json );
         }

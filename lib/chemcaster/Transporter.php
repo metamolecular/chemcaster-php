@@ -41,7 +41,7 @@ class Chemcaster_Transporter
     /**
      * GETS the representation data from the service
      * @param Chemcaster_Link $Link
-     * @return string
+     * @return string|boolean FALSE if error
      * @access public
      */
     public function get( Chemcaster_Link $Link )
@@ -52,14 +52,21 @@ class Chemcaster_Transporter
             "Accept: {$Link->mediaType}"
         ));
     
-        return curl_exec( $this->_conn );
+        $result = curl_exec( $this->_conn );
+
+        $stat_code = (string) $this->getLastStatusCode();
+
+        if( '2' == $stat_code[0] )
+            return $result;
+        else
+            return FALSE;
     }
 
     /**
      * POSTS data to the service
      * @param Chemcaster_Link $Link
      * @param string $data
-     * @return string
+     * @return string|boolean  FALSE if error
      * @access public
      */
     public function post( Chemcaster_Link $Link, $data )
@@ -71,14 +78,22 @@ class Chemcaster_Transporter
             "Content-Type: {$Link->mediaType}"
         ));
         curl_setopt( $this->_conn, CURLOPT_POSTFIELDS, $data);
-        return curl_exec( $this->_conn );
+
+        $result = curl_exec( $this->_conn );
+
+        $stat_code = (string) $this->getLastStatusCode();
+
+        if( '2' == $stat_code[0] )
+            return $result;
+        else
+            return FALSE;
     }
 
     /**
      * PUTS the data to the service
      * @param Chemcaster_Link $Link
      * @param string $data
-     * @return string
+     * @return string|boolean  FALSE if error
      * @access public
      */
     public function put( Chemcaster_Link $Link, $data )
@@ -90,7 +105,39 @@ class Chemcaster_Transporter
             "Content-Type: {$Link->mediaType}"
         ));
         curl_setopt( $this->_conn, CURLOPT_POSTFIELDS, $data);
-        return curl_exec( $this->_conn );
+
+        $result = curl_exec( $this->_conn );
+
+        $stat_code = (string) $this->getLastStatusCode();
+
+        if( '2' == $stat_code[0] )
+            return $result;
+        else
+            return FALSE;
+    }
+
+    /**
+     * DELETES the Resource represented by the link
+     * @param Chemcaster_Link $Link
+     * @return string|boolean  FALSE if error
+     * @access public
+     */
+    public function delete( Chemcaster_Link $Link )
+    {
+        curl_setopt( $this->_conn, CURLOPT_URL, $Link->uri );
+        curl_setopt( $this->_conn, CURLOPT_CUSTOMREQUEST, 'DELETE' );
+        curl_setopt( $this->_conn, CURLOPT_HTTPHEADER, array(
+            "Accept: {$Link->mediaType}"
+        ));
+
+        $result = curl_exec( $this->_conn );
+
+        $stat_code = (string) $this->getLastStatusCode();
+
+        if( '2' == $stat_code[0] )
+            return $result;
+        else
+            return FALSE;
     }
 
     /**

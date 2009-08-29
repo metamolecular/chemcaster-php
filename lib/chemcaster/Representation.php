@@ -22,7 +22,7 @@ class Chemcaster_Representation
     protected $_links = array();
 
     /**
-     *
+     * Stores the itemized resource links (if any)
      * @var array
      */
     protected $_items = array();
@@ -40,9 +40,19 @@ class Chemcaster_Representation
         $class = strtolower( str_replace('Chemcaster_', '', get_class($this)) );
 
         if( TRUE === is_object($link) )
+        {
             $raw_data = $this->_transporter->get($link);
+            if( FALSE === $raw_data )
+            {
+                $http_error = $this->_transporter->getLastStatusCode();
+                trigger_error( "Problem getting data. Server http status: $http_error" );
+                return;
+            }
+        }
         else
+        {
             $raw_data = $link;
+        }
 
         $decoded_obj = json_decode($raw_data);
         foreach( $decoded_obj as $name => $value )
@@ -67,7 +77,7 @@ class Chemcaster_Representation
     }
 
     /**
-     * Magic get method
+     * Magic get method. Allows dynamic access to keys stored in _links
      * @param string $property
      * @return Chemcaster_Link
      * @access public
@@ -117,4 +127,24 @@ class Chemcaster_Representation
     }
 }
 
-?>
+class Chemcaster_UpdateException extends Exception
+{
+    public $http_error_code;
+    public $http_errors = array();
+
+    function __construct()
+    {
+        parent::__construct("Error trying to update resource ");
+    }
+}
+
+class Chemcaster_DestroyException extends Exception
+{
+    public $http_error_code;
+    public $http_errors = array();
+
+    function __construct()
+    {
+        parent::__construct("Error trying to destroy resource ");
+    }
+}
