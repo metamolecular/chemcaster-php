@@ -28,12 +28,6 @@ class Chemcaster_Representation
     protected $_items = array();
 
     /**
-     * Stores any errors
-     * @var array
-     */
-    protected $_errors = array();
-
-    /**
      * Class constructor
      * @param Chemcaster_Transporter $transporter
      * @param mixed $link - Chemcaster_Link or raw json data
@@ -120,15 +114,6 @@ class Chemcaster_Representation
     {
         $obj = json_decode( $json_string );
         return new Chemcaster_Link($obj->name, $obj->uri, $obj->mediaType);
-    }
-
-    /**
-     * Gets the object's errors array
-     * @return array
-     */
-    public function getErrors()
-    {
-        return $this->_errors;
     }
 }
 

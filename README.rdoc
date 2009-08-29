@@ -29,4 +29,15 @@ search.
    $service      = Chemcaster_Service::connect('username', 'password');
    $registries   = $service->registries;
 
-   $new_registry = $registries->create( array( 'name' => 'CarboBlocks, Inc.' ) );
+   try {
+
+    $new_registry = $registries->create( array( 'name' => 'CarboBlocks, Inc.' ) );
+
+   } catch (Chemcaster_CreationException $e ) {
+
+      //...handle exception
+      //echo $e->getMessage();
+      //echo $e->http_error_code;
+      //print_r( $e->http_errors );
+
+   }

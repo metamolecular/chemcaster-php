@@ -45,12 +45,15 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
         }
         else
         {
+            $excep = new Chemcaster_CreationException();
+            $excep->http_error_code = $http_code;
             $errors = json_decode($ret_json);
             foreach( $errors as $error )
             {
-                $this->_errors[] = "{$error->field} {$error->text}";
+                $excep->http_errors[] = "{$error->field} {$error->text}";
             }
-            throw new Chemcaster_CreationException( "http status: {$http_code}" );
+
+            throw $excep;
         }
     }
 
@@ -76,7 +79,6 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function current()
     {
-        //return $this->_fetched->items[$this->_position];
         $link = $this->_items[$this->_position];
         return $this->_factory($link);
     }
@@ -102,7 +104,6 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function valid()
     {
-        //$this->_fetch();
         return isset( $this->_items[$this->_position] );
 
     }
@@ -112,8 +113,6 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function offsetSet($offset, $value)
     {
-        //$this->_fetch();
-        //$this->_fetched->items[$offset] = $value;
         $this->_items[$offset] = $value;
     }
 
@@ -122,8 +121,6 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function offsetExists($offset)
     {
-        //$this->_fetch();
-        //return isset($this->_fetched->items[$offset]);
         return isset($this->_items[$offset]);
     }
 
@@ -132,8 +129,6 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function offsetUnset($offset)
     {
-        //$this->_fetch();
-        //unset($this->_fetched->items[$offset]);
         unset($this->_items[$offset]);
     }
 
@@ -154,4 +149,13 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
     }
 }
 
-class Chemcaster_CreationException extends Exception{}
+class Chemcaster_CreationException extends Exception
+{
+    public $http_error_code;
+    public $http_errors = array();
+
+    function __construct()
+    {
+        parent::__construct("Error trying to create new resource ");
+    }
+}
