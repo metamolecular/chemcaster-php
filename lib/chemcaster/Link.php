@@ -2,8 +2,8 @@
 
 /**
  * Link class
- * @copyright   Copyright (c) 2009, Metamolecular, LLC
- * @license     http://www.gnu.org/licenses/gpl.txt GNU GENERAL PUBLIC LICENSE
+ * @copyright   Copyright (c) 2009 Metamolecular, LLC
+ * @license     MIT License (see 'LICENSE' file)
  * @link        http://metamolecular.com
  * @author      Rob Apodaca <rob.apodaca@gmail.com>
  */
