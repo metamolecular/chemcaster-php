@@ -68,6 +68,11 @@ class Chemcaster_Representation
                 foreach( $value as $v )
                 $this->_results[] = new Chemcaster_Link($v->name, $v->uri, $v->media_type);
             }
+            else if( 'events' === $name)
+            {
+                foreach( $value as $v )
+                    $this->_events[] = new Chemcaster_Link($v->name, $v->uri, $v->media_type);
+            }
             else if( TRUE === isset($this->_links[$name]) )
             {
                 $this->_links[$name] = new Chemcaster_Link($value->name, $value->uri, $value->media_type);

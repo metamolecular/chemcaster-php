@@ -11,5 +11,6 @@ require dirname( __FILE__ ) . '/chemcaster/Registration.php';
 require dirname( __FILE__ ) . '/chemcaster/Substance.php';
 require dirname( __FILE__ ) . '/chemcaster/Structure.php';
 require dirname( __FILE__ ) . '/chemcaster/Execution.php';
+require dirname( __FILE__ ) . '/chemcaster/Log.php';
 require dirname( __FILE__ ) . '/chemcaster/Image.php';
 
