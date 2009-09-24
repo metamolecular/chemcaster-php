@@ -9,18 +9,25 @@
  */
 class Chemcaster_Log extends Chemcaster_Item implements Iterator, ArrayAccess
 {
-    protected $_events = array();
+    protected $events = array();
 
     /**
      * Used by Iterator Interface
      * @var int
      */
     private $_position = 0;
-    
-    protected $_links = array(
-        'registry'          => '',
-        'index'             => ''
-    );
+
+    /**
+     * Created
+     * @var datetime
+     */
+    public $created_at;
+
+    /**
+     * Number of seconds covered by this log
+     * @var number
+     */
+    public $interval;
 
     /**
      * Gets the count of items in this index

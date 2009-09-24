@@ -9,8 +9,9 @@
  */
 class Chemcaster_Component extends Chemcaster_Item
 {
-    protected $_links = array(
-        'structure'         => '',
-        'substance'         => ''
-    );
+    /**
+     * Component Multiplier
+     * @var number
+     */
+    public $multiplier;
 }

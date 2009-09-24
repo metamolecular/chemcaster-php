@@ -9,7 +9,30 @@
  */
 class Chemcaster_Image extends Chemcaster_Item
 {
-    protected $_links = array( 'imageable' => '' );
+    /**
+     * Width of Image
+     * @var number
+     */
+    public $width;
+
+    /**
+     * Height of Image
+     * @var number
+     */
+    public $height;
+
+    /**
+     * Media type
+     * @var string (image/png)
+     */
+    public $format;
+
+    /**
+     * Base64 encoding
+     * @var string
+     */
+    public $data;
+
 }
 
 ?>

@@ -9,18 +9,43 @@
  */
 class Chemcaster_Execution extends Chemcaster_Item implements Iterator, ArrayAccess
 {
-    protected $_results = array();
+    protected $results = array();
 
     /**
      * Used by Iterator Interface
      * @var int
      */
     private $_position = 0;
-    
-    protected $_links = array(
-        'index'         => '',
-        'executable'    => ''
-    );
+
+    /**
+     * Cursor
+     * @var string
+     */
+    public $cursor;
+
+    /**
+     * Reverse
+     * @var boolean
+     */
+    public $reverse;
+
+    /**
+     * Max results
+     * @var number
+     */
+    public $maximum_results;
+
+    /**
+     * next cursor
+     * @var string
+     */
+    public $next_cursor;
+
+    /**
+     * previous cursor
+     * @var string
+     */
+    public $previous_cursor;
 
     /**
      * Gets the count of items in this index

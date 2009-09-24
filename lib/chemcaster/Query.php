@@ -9,12 +9,11 @@
  */
 class Chemcaster_Query extends Chemcaster_Item
 {
-    protected $_links = array(
-        'index'        => '',
-        'images'       => '',
-        'executions'   => '',
-        'registry'     => ''
-    );
+    /**
+     * Query serialization
+     * @var string
+     */
+    public $serialization;
 }
 
 ?>

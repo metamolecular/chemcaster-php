@@ -17,13 +17,13 @@ class Chemcaster_Item extends Chemcaster_Representation
      */
     public function update( $args )
     {
-        if( FALSE === isset($this->_links['update']) )
+        if( FALSE === isset($this->links['update']) )
         {
             throw new Chemcaster_MethodNotAllowed("Update not allowed here");
             return;
         }
 
-        $link = $this->_links['update'];
+        $link = $this->links['update'];
         $rep_name = strtolower( $link->getRepresentationName() );
         $json_args = json_encode( array( $rep_name => $args) );
 
@@ -54,13 +54,13 @@ class Chemcaster_Item extends Chemcaster_Representation
      */
     public function destroy( )
     {
-        if( FALSE === isset($this->_links['destroy']) )
+        if( FALSE === isset($this->links['destroy']) )
         {
             throw new Chemcaster_MethodNotAllowed("Destroy not allowed here");
             return;
         }
 
-        $link = $this->_links['destroy'];
+        $link = $this->links['destroy'];
         $rep_name = strtolower( $link->getRepresentationName() );
 
         $ret_json = $this->_transporter->delete( $link );

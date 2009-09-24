@@ -13,15 +13,13 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      * Stores the itemized resource links (if any)
      * @var array
      */
-    protected $_items = array();
+    protected $items = array();
     
     /**
      * Used by Iterator Interface
      * @var int
      */
     private $_position = 0;
-
-    protected $_links = array( 'parent' => '', 'create' => '', 'previous_page' => '', 'next_page' => '' );
 
     /**
      * Create method for give index
@@ -30,12 +28,20 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      * @access public
      * @throws Chemcaster_CreationException
      */
-    public function create( $args )
+    public function create( $args = NULL )
     {
-        $link = $this->_links['create'];
-        $rep_name = strtolower( $link->getRepresentationName() );
-        $json_args = json_encode( array( $rep_name => $args) );
+        if( FALSE === isset($this->links['create']) )
+        {
+            throw new Chemcaster_MethodNotAllowed("Create not allowed here");
+            return;
+        }
 
+        if( NULL === $args ) $args = new stdClass;
+
+        $link = $this->links['create'];
+        $rep_name = strtolower( $link->getRepresentationName() );
+        
+        $json_args = json_encode( array( $rep_name => $args) );
         $ret_json = $this->_transporter->post( $link, $json_args );
 
         if( FALSE === $ret_json )
@@ -62,7 +68,7 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function size()
     {
-        return count( $this->_items );
+        return count( $this->items );
     }
 
     /**
@@ -78,7 +84,7 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function current()
     {
-        $link = $this->_items[$this->_position];
+        $link = $this->items[$this->_position];
         return $this->_factory($link);
     }
 
@@ -103,7 +109,7 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function valid()
     {
-        return isset( $this->_items[$this->_position] );
+        return isset( $this->items[$this->_position] );
 
     }
 
@@ -112,7 +118,7 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function offsetSet($offset, $value)
     {
-        $this->_items[$offset] = $value;
+        $this->items[$offset] = $value;
     }
 
     /**
@@ -120,7 +126,7 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function offsetExists($offset)
     {
-        return isset($this->_items[$offset]);
+        return isset($this->items[$offset]);
     }
 
     /**
@@ -128,7 +134,7 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function offsetUnset($offset)
     {
-        unset($this->_items[$offset]);
+        unset($this->items[$offset]);
     }
 
     /**
@@ -136,9 +142,9 @@ class Chemcaster_Index extends Chemcaster_Representation implements Iterator, Ar
      */
     public function offsetGet($offset)
     {
-        if( TRUE === isset($this->_items[$offset]) )
+        if( TRUE === isset($this->items[$offset]) )
         {
-            $link = $this->_items[$offset];
+            $link = $this->items[$offset];
             return $this->_factory($link);
         }
         else

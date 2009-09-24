@@ -9,11 +9,9 @@
  */
 class Chemcaster_Registration extends Chemcaster_Item
 {
-    protected $_links = array(
-        'index'             => '',
-        'update'            => '',
-        'destroy'           => '',
-        'registry'          => '',
-        'substance'         => ''
-    );
+    /**
+     * Array of templates
+     * @var array
+     */
+    public $templates = array();
 }

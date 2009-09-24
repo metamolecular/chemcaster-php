@@ -9,11 +9,15 @@
  */
 class Chemcaster_Substance extends Chemcaster_Item
 {
-    protected $_links = array(
-        'index'             => '',
-        'registry'          => '',
-        'registration'      => '',
-        'components'        => '',
-        'images'            => ''
-    );
+    /**
+     * Substance serialization
+     * @var string
+     */
+    public $serialization;
+
+    /**
+     * Substance INCHI
+     * @var string
+     */
+    public $inchi;
 }

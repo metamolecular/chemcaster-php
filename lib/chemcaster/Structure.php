@@ -9,10 +9,15 @@
  */
 class Chemcaster_Structure extends Chemcaster_Item
 {
-    protected $_links = array(
-        'index'             => '',
-        'images'            => '',
-        'components'        => '',
-        'registry'          => ''
-    );
+    /**
+     * Serialization
+     * @var string
+     */
+    public $serialization;
+
+    /**
+     * inchi
+     * @var string
+     */
+    public $inchi;
 }

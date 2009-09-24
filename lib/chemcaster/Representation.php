@@ -19,7 +19,7 @@ class Chemcaster_Representation
      * Holds array of links. Override in sub classes for specific Representations
      * @var array
      */
-    protected $_links = array();
+    protected $links = array();
 
     /**
      * Class constructor
@@ -55,27 +55,22 @@ class Chemcaster_Representation
             {
                 foreach( $value as $k => $v )
                 {
-                    $this->$k = $v;
+                    if( TRUE === is_array($this->$k) )
+                        foreach( $v as $vv )
+                            array_push($this->$k, $vv);
+                    else
+                        $this->$k = $v;
                 }
             }
-            else if( 'items' === $name )
+            else if( TRUE === is_array($value) )
             {
+                $this->$name = array();
                 foreach( $value as $v )
-                    $this->_items[] = new Chemcaster_Link($v->name, $v->uri, $v->media_type);
+                    $this->{$name}[] = new Chemcaster_Link($v->name, $v->uri, $v->media_type);
             }
-            else if( 'results' === $name)
+            else
             {
-                foreach( $value as $v )
-                $this->_results[] = new Chemcaster_Link($v->name, $v->uri, $v->media_type);
-            }
-            else if( 'events' === $name)
-            {
-                foreach( $value as $v )
-                    $this->_events[] = new Chemcaster_Link($v->name, $v->uri, $v->media_type);
-            }
-            else if( TRUE === isset($this->_links[$name]) )
-            {
-                $this->_links[$name] = new Chemcaster_Link($value->name, $value->uri, $value->media_type);
+                $this->links[$name] = new Chemcaster_Link($value->name, $value->uri, $value->media_type);
             }
         }
     }
@@ -88,9 +83,9 @@ class Chemcaster_Representation
      */
     public function __get( $property )
     {
-        if( TRUE === array_key_exists($property, $this->_links) && '' !== $this->_links[$property] )
+        if( TRUE === array_key_exists($property, $this->links) && '' !== $this->links[$property] )
         {
-            $link = $this->_links[$property];
+            $link = $this->links[$property];
             return $this->_factory( $link );
         }
         else

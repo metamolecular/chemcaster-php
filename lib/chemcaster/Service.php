@@ -10,10 +10,10 @@
 class Chemcaster_Service extends Chemcaster_Representation
 {
     /**
-     * The links for this rep.
-     * @var array
+     * Version
+     * @var string
      */
-    protected $_links = array( 'registries' => '' );
+    public $version;
 
     /**
      * Sets up initial connection and returns the Chemcaster_Service object

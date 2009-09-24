@@ -9,14 +9,15 @@
  */
 class Chemcaster_Registry extends Chemcaster_Item
 {
-    protected $_links = array(
-        'service'           => '',
-        'substances'        => '',
-        'structures'        => '',
-        'queries'           => '',
-        'registrations'     => '',
-        'index'             => '',
-        'update'            => '',
-        'destroy'           => ''
-    );
+    /**
+     * Registry Name
+     * @var string
+     */
+    public $name;
+
+    /**
+     * Registry can be deleted
+     * @var boolean
+     */
+    public $deletable;
 }

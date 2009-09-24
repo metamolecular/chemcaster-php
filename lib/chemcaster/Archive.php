@@ -9,12 +9,17 @@
  */
 class Chemcaster_Archive extends Chemcaster_Item
 {
-    protected $_links = array( 
-        'zipfile'   => '',
-        'index'     => '',
-        'destroy'   => '',
-        'registry'  => ''
-    );
+    /**
+     * Archive Compiled
+     * @var boolean
+     */
+    public $done;
+
+    /**
+     * archive initiation
+     * @var datetime
+     */
+    public $created_at;
 }
 
 ?>

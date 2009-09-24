@@ -20,8 +20,7 @@ class StructureTest extends PHPUnit_Framework_TestCase
           ->method('get')
           ->will($this->returnValue('{
               "structure": {
-                "name": "name",
-                "molfile": "molfile",
+                "serialization": "serialization",
                 "inchi": "inchi"
               }
             }'));
@@ -43,14 +42,9 @@ class StructureTest extends PHPUnit_Framework_TestCase
         $this->assertTrue('Chemcaster_Structure' == get_class($this->structure));
     }
 
-    public function testStructureName()
+    public function testStructureSerialization()
     {
-        $this->assertSame('name', $this->structure->name);
-    }
-
-    public function testStructureMolfile()
-    {
-        $this->assertSame('molfile', $this->structure->molfile);
+        $this->assertSame('serialization', $this->structure->serialization);
     }
 
     public function testStructureInchi()

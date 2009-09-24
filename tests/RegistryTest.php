@@ -20,7 +20,7 @@ class RegistryTest extends PHPUnit_Framework_TestCase
              ->will($this->returnValue('{
                   "registry": {
                     "name": "bar",
-                    "deleteable": false
+                    "deletable": false
                   }
                 }'));
 
@@ -44,9 +44,9 @@ class RegistryTest extends PHPUnit_Framework_TestCase
         $this->assertSame('bar', $this->registry->name);
     }
 
-    public function testGetDeleteable()
+    public function testGetDeletable()
     {
-        $this->assertSame(false, $this->registry->deleteable);
+        $this->assertSame(false, $this->registry->deletable);
     }
     
 }
